@@ -1,0 +1,4 @@
+repository "Fruit Wars@unity_gKOr7esLYtZdig@cloud"
+  path "/"
+    br "/main"
+    co "/main"
