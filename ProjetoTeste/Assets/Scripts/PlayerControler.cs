@@ -8,13 +8,14 @@ public class PlayerControler : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] string playerName;
     [SerializeField] Sprite sprite;
+    [SerializeField] float moveSpeed = 5f;
     private Vector2 input;
 
     private Character character;
 
     public string PlayerName { get => playerName; }
     public Sprite Sprite { get => sprite; }
-
+        
     public Character Character { get => character; }
 
     private void Awake()
@@ -33,13 +34,9 @@ public class PlayerControler : MonoBehaviour
             input.x = Input.GetAxisRaw("Horizontal");
             input.y = Input.GetAxisRaw("Vertical");
 
-            if (input.x != 0) input.y = 0; // limit diagonal movement
+            input.Normalize();
 
-            if (input != Vector2.zero)
-            {
-                StartCoroutine(character.Move(input, OnMoveOver));
-
-            }
+            MovePlayer();
         }
 
         character.HandleUpdate();
@@ -48,6 +45,15 @@ public class PlayerControler : MonoBehaviour
         {
             Interact();
         }
+    }
+
+    private void MovePlayer()
+    {
+        // Calculate the movement amount based on input and speed
+        Vector3 movement = new Vector3(input.x, input.y, 0) * moveSpeed * Time.deltaTime;
+
+        // Apply the movement
+        transform.Translate(movement);
     }
 
     void Interact()
